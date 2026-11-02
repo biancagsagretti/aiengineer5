@@ -1,0 +1,125 @@
+{
+  "generado": "2026-11-01T22:47:03.251431+00:00",
+  "ilustrativa": false,
+  "proveedor": "gemini",
+  "recursion_limit": 10,
+  "escenarios": [
+    {
+      "nombre": "multipaso_y_memoria",
+      "thread_id": "demo-multipaso-01a039",
+      "turnos": [
+        {
+          "usuario": "¿Cuál de los clientes 102 y 205 gastó más, y cuánto?",
+          "pasos": [
+            {
+              "nodo": "modelo",
+              "tipo": "ai",
+              "contenido": "",
+              "tool_calls": [
+                {
+                  "nombre": "buscar_pedidos",
+                  "args": {
+                    "cliente_id": 102
+                  }
+                },
+                {
+                  "nombre": "buscar_pedidos",
+                  "args": {
+                    "cliente_id": 205
+                  }
+                }
+              ]
+            },
+            {
+              "nodo": "tools",
+              "tipo": "tool",
+              "contenido": "{\"cliente_id\": 102, \"pedidos\": 3, \"total\": 14500}",
+              "herramienta": "buscar_pedidos"
+            },
+            {
+              "nodo": "tools",
+              "tipo": "tool",
+              "contenido": "{\"cliente_id\": 205, \"pedidos\": 2, \"total\": 22000}",
+              "herramienta": "buscar_pedidos"
+            },
+            {
+              "nodo": "modelo",
+              "tipo": "ai",
+              "contenido": "El cliente **205** gastó más, con un total de **$22.000** (frente a los **$14.500** del cliente 102)."
+            }
+          ],
+          "llamadas_a_herramientas": 2,
+          "respuesta_final": "El cliente **205** gastó más, con un total de **$22.000** (frente a los **$14.500** del cliente 102)."
+        },
+        {
+          "usuario": "¿Y cuál fue el último pedido de ese cliente?",
+          "pasos": [
+            {
+              "nodo": "modelo",
+              "tipo": "ai",
+              "contenido": "",
+              "tool_calls": [
+                {
+                  "nombre": "obtener_ultimo_pedido",
+                  "args": {
+                    "cliente_id": 205
+                  }
+                }
+              ]
+            },
+            {
+              "nodo": "tools",
+              "tipo": "tool",
+              "contenido": "{\"cliente_id\": 205, \"ultimo_pedido\": {\"id\": \"P-2011\", \"fecha\": \"2026-10-02\", \"monto\": 10000}}",
+              "herramienta": "obtener_ultimo_pedido"
+            },
+            {
+              "nodo": "modelo",
+              "tipo": "ai",
+              "contenido": "El último pedido del cliente 205 fue el **P-2011**, realizado el **02/10/2026**, por un monto de **$10.000**."
+            }
+          ],
+          "llamadas_a_herramientas": 1,
+          "respuesta_final": "El último pedido del cliente 205 fue el **P-2011**, realizado el **02/10/2026**, por un monto de **$10.000**."
+        }
+      ]
+    },
+    {
+      "nombre": "error_y_reintento",
+      "thread_id": "demo-error-01a039",
+      "turnos": [
+        {
+          "usuario": "¿Cuántos pedidos tuvo el cliente 999?",
+          "pasos": [
+            {
+              "nodo": "modelo",
+              "tipo": "ai",
+              "contenido": "",
+              "tool_calls": [
+                {
+                  "nombre": "buscar_pedidos",
+                  "args": {
+                    "cliente_id": 999
+                  }
+                }
+              ]
+            },
+            {
+              "nodo": "tools",
+              "tipo": "tool",
+              "contenido": "{\"error\": \"El cliente 999 no existe en la base de datos de ventas.\", \"clientes_disponibles\": [102, 205, 310]}",
+              "herramienta": "buscar_pedidos"
+            },
+            {
+              "nodo": "modelo",
+              "tipo": "ai",
+              "contenido": "El cliente 999 no existe en la base de datos. Los clientes disponibles son: 102, 205 y 310. ¿Querés consultar sobre alguno de ellos?"
+            }
+          ],
+          "llamadas_a_herramientas": 1,
+          "respuesta_final": "El cliente 999 no existe en la base de datos. Los clientes disponibles son: 102, 205 y 310. ¿Querés consultar sobre alguno de ellos?"
+        }
+      ]
+    }
+  ]
+}
